@@ -1,0 +1,20 @@
+[
+    {
+        "tipo": "Carro",
+        "modelo": "Ferrari",
+        "placa": "COR19I1",
+        "disponivel": false
+    },
+    {
+        "tipo": "Moto",
+        "modelo": "BMW S 1000 RR",
+        "placa": "ABC1FI7",
+        "disponivel": true
+    },
+    {
+        "tipo": "Moto",
+        "modelo": "Bis",
+        "placa": "CCC7C94",
+        "disponivel": true
+    }
+]
