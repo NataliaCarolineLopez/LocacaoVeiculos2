@@ -4,9 +4,9 @@
     "type": "project",
     "autoload": {
         "psr-4" : {
-            "Interfaces\\": "interfaces/",
-            "Models\\": "models/",
-            "Services\\": "services/"
+            "interfaces\\": "interfaces/",
+            "models\\": "models/",
+            "services\\": "services/"
         }
     },
     "require": {
