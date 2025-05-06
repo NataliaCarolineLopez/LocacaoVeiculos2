@@ -1,45 +1,43 @@
 <?php
 
-//incluir o autoload
+// Incluir o autoload
 require_once __DIR__ . '/../vendor/autoload.php';
 
-//incluir o arquivo com as variaveis
+// Incluir o arquivo com as variáveis
 require_once __DIR__ . '/../config/config.php';
 
 session_start();
-
-// importar as classes locadora e auth
+// Importar as classes locadora e auth
 use Services\{Locadora, Auth};
 
-// importar as classes carro e moto
+// Importar as classes Carro e Moto
 use Models\{Carro, Moto};
 
-// verificar se o usuário esta logado
+// Verificar se o usuário está logado
 if(!Auth::verificarLogin()){
     header('Location: login.php');
     exit;
 }
 
-// condição para logout
+// Condição para logout
 if (isset($_GET['logout'])){
     (new Auth())->logout();
     header('Location: login.php');
     exit;
 }
 
-// criar uma instância da classe locadora
+// Criar uma instância da classe locadora
 $locadora = new Locadora();
 
 $mensagem = '';
 
 $usuario = Auth::getUsuario();
 
-// verificar os dados do formulario via POST
+// Verificar dados do formulário via POST
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
-    //verificar se requer permissão de administrador 
-    if(isset($_POST['adicionar']) || isset($_POST['deletar']) ||isset($_POST['alugar']) ||isset($_POST['devolver'])){
-     
+    // Verifico em qual login está (ADM/Usuário)
+    if(isset($_POST['adicionar']) || isset($_POST['deletar']) || isset($_POST['alugar']) || isset($_POST['devolver'])){
         if(!Auth::isAdmin()){
             $mensagem = "Você não tem permissão para realizar essa ação";
             goto renderizar;
@@ -51,12 +49,13 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $placa = $_POST['placa'];
         $tipo = $_POST['tipo'];
 
-        $veiculo = ($tipo == 'Carro') ? new Carro($modelo, $placa) : new moto ($modelo, $placa);
+        $veiculo = ($tipo == 'Carro') ? new Carro($modelo, $placa) : new Moto($modelo, $placa);
 
-        $locadora ->adicionarVeiculo($veiculo);
+        $locadora->adicionarVeiculo($veiculo);
 
         $mensagem = "Veículo adicionado com sucesso!";
     }
+
     elseif(isset($_POST['alugar'])){
         $dias = isset($_POST['dias']) ? (int)$_POST['dias'] : 1;
         $mensagem = $locadora->alugarVeiculo($_POST['modelo'], $dias);
@@ -72,9 +71,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $tipo = $_POST['tipo_calculo'];
         $valor = $locadora->calcularPrevisaoAluguel($dias, $tipo);
 
-        $mensagem = "Previsão de valor para {$dias} dias: R$ . number_format($valor, 2, ',','.')";
+        $mensagem = "Previsão de valor para {$dias} dias: R$" . number_format($valor, 2, ',','.');
     }
-
 }
 
 renderizar:
